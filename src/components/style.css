@@ -1,0 +1,20 @@
+.completed {
+    text-decoration: line-through;
+}
+.task-list {
+    margin-top: 20px;
+}
+.task-input {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+
+}
+body {
+    background-image: url('./marissa-grootes-ck0i9Dnjtj0-unsplash.jpg'); /* Replace 'background.jpg' with your image file path */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    /* Add any additional background styles as needed */
+}

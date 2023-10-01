@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task List App</title>
+    <!-- Add Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="container vh-100 d-flex justify-content-center align-items-center">
+        <!-- Center the content vertically and horizontally -->
+        <div id="app">
+            <h1 class="mt-4">Task List</h1>
+            
+            <!-- Task Creation Component -->
+            <div class="task-input">
+                <input class="form-control" v-model="newTask" @keyup.enter="addTask" placeholder="Add a new task">
+                <button class="btn btn-primary" @click="addTask">Add Task</button>
+            </div>
+
+            <!-- Task Filtering Component -->
+            <div class="form-group">
+                <label>Show: </label>
+                <select class="form-control" v-model="filter">
+                    <option value="all">All</option>
+                    <option value="incomplete">Incomplete</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+
+            <!-- Task List Component -->
+            <ul class="list-group task-list">
+                <li class="list-group-item" v-for="(task, index) in filteredTasks" :key="index">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="taskCheckbox{{ index }}" v-model="task.completed">
+                        <label class="custom-control-label" :for="'taskCheckbox' + index">
+                            <span :class="{ 'completed': task.completed }">{{ task.title }}</span>
+                        </label>
+                    </div>
+                    <button class="btn btn-danger btn-sm float-right" @click="deleteTask(index)">Delete</button>
+                    <!-- Status Button -->
+                    <button class="btn btn-info btn-sm float-right mr-2" @click="toggleStatus(task)">{{ task.completed ? 'Mark Incomplete' : 'Mark Complete' }}</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Add Bootstrap and Vue.js scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                tasks: [
+                    { title: 'Task 1', completed: false },
+                    { title: 'Task 2', completed: true },
+                ],
+                newTask: '',
+                filter: 'all',
+            },
+            computed: {
+                filteredTasks() {
+                    if (this.filter === 'completed') {
+                        return this.tasks.filter(task => task.completed);
+                    } else if (this.filter === 'incomplete') {
+                        return this.tasks.filter(task => !task.completed);
+                    } else {
+                        return this.tasks;
+                    }
+                },
+            },
+            methods: {
+                addTask() {
+                    if (this.newTask.trim() === '') return;
+                    this.tasks.push({ title: this.newTask, completed: false });
+                    this.newTask = '';
+                },
+                deleteTask(index) {
+                    this.tasks.splice(index, 1);
+                },
+                toggleStatus(task) {
+                    task.completed = !task.completed;
+                },
+            },
+        });
+    </script>
+</body>
+</html>
